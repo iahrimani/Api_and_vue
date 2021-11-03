@@ -19,10 +19,23 @@ export default {
     ],
     data() {
         return {
-            desk: [],
+            desk: null,
             errored: false,
             loading: true,
         }
+    },
+    mounted() {
+        axios.get('/api/V1/desks/' + this.deskId)
+            .then(response => {
+                this.desk = response.data.data
+            })
+            .catch(error => {
+                console.log(error)
+                this.errored = true
+            })
+            .finally(() => {
+                this.loading = false
+            })
     },
     methods:{
         // https://www.youtube.com/watch?v=VwQr6LLua_M&list=PLze7bMjv1CYtP6FSv6L60IpI3rynxAStr&index=9
@@ -43,19 +56,7 @@ export default {
                 })
         }
     },
-    mounted() {
-        axios.get('/api/V1/desks/' + this.deskId)
-            .then(response => {
-                this.desk = response.data.data
-            })
-            .catch(error => {
-                console.log(error)
-                this.errored = true
-            })
-            .finally(() => {
-                this.loading = false
-            })
-    }
+
 }
 </script>
 
