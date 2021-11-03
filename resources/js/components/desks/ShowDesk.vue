@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="form-group">
-            <input type="text" @blur="saveName" v-model="desk.name" class="form-control">
+            <input type="text" @blur="saveName" v-model="name" class="form-control">
         </div>
         <div class="alert alert-danger" role="alert" v-if="errored">
             Ошибка загрузки данных !
@@ -19,30 +19,17 @@ export default {
     ],
     data() {
         return {
-            desk: null,
+            name: null,
             errored: false,
             loading: true,
         }
     },
-    mounted() {
-        axios.get('/api/V1/desks/' + this.deskId)
-            .then(response => {
-                this.desk = response.data.data
-            })
-            .catch(error => {
-                console.log(error)
-                this.errored = true
-            })
-            .finally(() => {
-                this.loading = false
-            })
-    },
-    methods:{
+    methods: {
         // https://www.youtube.com/watch?v=VwQr6LLua_M&list=PLze7bMjv1CYtP6FSv6L60IpI3rynxAStr&index=9
-        saveName(){
+        saveName() {
             axios.post('/api/V1/desks/' + this.deskId, {
                 _method: 'PUT',
-                name: this.desk.name,
+                name: this.name,
             })
                 .then(response => {
                     this.desk = response.data.data
@@ -56,6 +43,20 @@ export default {
                 })
         }
     },
+    mounted() {
+        axios.get('/api/V1/desks/' + this.deskId)
+            .then(response => {
+                this.name = response.data.data.name
+            })
+            .catch(error => {
+                console.log(error)
+                this.errored = true
+            })
+            .finally(() => {
+                this.loading = false
+            })
+    },
+
 
 }
 </script>
